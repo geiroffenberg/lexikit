@@ -89,16 +89,6 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LexiKit - Offline Word Tools'),
-        actions: [
-          TextButton(
-            onPressed: _resetAll,
-            child: const Text('Reset All'),
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -118,38 +108,33 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: colorScheme.outlineVariant),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Offline Word Utilities',
-                          style: textTheme.headlineSmall,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('LexiKit', style: textTheme.headlineSmall),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Use any tool row below, tap Go, and get instant results. Everything runs from the local dictionary file for fast offline usage.',
-                          style: textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 12),
+                      OutlinedButton(
+                        onPressed: _resetAll,
+                        child: const Text('Reset All'),
+                      ),
+                    ],
                   ),
                   if (_service.loadingError.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
                         _service.loadingError,
-                        style: TextStyle(color: Theme.of(context).colorScheme.error),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
                       ),
                     ),
-                  const SizedBox(height: 16),
-                  _SectionHeading(title: 'Utilities', subtitle: 'Simple tools, one line each.'),
                   const SizedBox(height: 10),
                   for (final type in ToolType.values) ...[
                     ToolRow(
@@ -165,7 +150,9 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
                         margin: const EdgeInsets.only(top: 8, bottom: 14),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: _ResultView(
@@ -177,7 +164,9 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
                       const SizedBox(height: 14),
                   ],
                   const SizedBox(height: 6),
-                  _SectionHeading(title: 'Instructions', subtitle: 'How every tool works in plain language.'),
+                  _SectionHeading(
+                      title: 'Instructions',
+                      subtitle: 'How every tool works in plain language.'),
                   const SizedBox(height: 8),
                   Text(
                     lexiKitInstructionsIntro,
@@ -194,7 +183,9 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
                   const SizedBox(height: 18),
                   const Divider(),
                   const SizedBox(height: 10),
-                  _SectionHeading(title: 'Footer', subtitle: 'Site information and policy text.'),
+                  _SectionHeading(
+                      title: 'Footer',
+                      subtitle: 'Site information and policy text.'),
                   const SizedBox(height: 8),
                   _FooterPolicyTile(
                     title: 'About',
@@ -284,8 +275,10 @@ class _FooterPolicyTile extends StatelessWidget {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
           childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14))),
-          collapsedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14))),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(14))),
+          collapsedShape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(14))),
           initiallyExpanded: initiallyExpanded,
           title: Text(
             title,
@@ -383,9 +376,9 @@ class _ResultView extends StatelessWidget {
               child: Text(
                 word,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w600,
-                ),
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ),
           ),
@@ -401,7 +394,8 @@ class _ResultView extends StatelessWidget {
         .toList();
 
     if (lines.isEmpty) return null;
-    final allWordLike = lines.every((line) => RegExp(r'^[a-z-]+$').hasMatch(line));
+    final allWordLike =
+        lines.every((line) => RegExp(r'^[a-z-]+$').hasMatch(line));
     if (!allWordLike) return null;
     return lines;
   }

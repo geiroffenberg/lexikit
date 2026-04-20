@@ -13,6 +13,13 @@ class LexiKitApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1F6F78)),
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, height: 1.15),
+          titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, height: 1.2),
+          bodyLarge: TextStyle(fontSize: 17, height: 1.45),
+          bodyMedium: TextStyle(fontSize: 15, height: 1.45),
+          bodySmall: TextStyle(fontSize: 13.5, height: 1.35),
+        ),
       ),
       home: const LexiKitHomeScreen(),
     );
