@@ -7,16 +7,18 @@ https://geiroffenberg.github.io/lexikit/
 
 ## What It Includes
 
+
 LexiKit currently provides these tools:
 
-1. Unscrambler
-2. Scrambler
-3. Anagram Maker
-4. Crossword Finder
-5. Word Validator
-6. Random Word Generator
-7. Word Counter
-8. Syllable Counter
+1. Scrabble Finder
+2. Unscrambler
+3. Scrambler
+4. Anagram Maker
+5. Crossword Finder
+6. Word Validator
+7. Random Word Generator
+// 8. Word Counter (blocked out)
+// 9. Syllable Counter (blocked out)
 
 All core functionality runs using the local dictionary asset in [assets/words_alpha.txt](assets/words_alpha.txt).
 

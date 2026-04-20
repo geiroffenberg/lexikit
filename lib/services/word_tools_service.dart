@@ -7,24 +7,24 @@ import 'tools/anagram_maker_tool.dart';
 import 'tools/crossword_finder_tool.dart';
 import 'tools/random_word_generator_tool.dart';
 import 'tools/scrambler_tool.dart';
-import 'tools/syllable_counter_tool.dart';
 import 'tools/tool_context.dart';
 import 'tools/unscrambler_tool.dart';
-import 'tools/word_counter_tool.dart';
 import 'tools/word_tool.dart';
 import 'tools/word_validator_tool.dart';
+import 'tools/scrabble_finder_tool.dart';
 
 class WordToolsService {
   final Random _random = Random();
   final Map<ToolType, WordTool> _tools = {
+    ToolType.scrabbleFinder: ScrabbleFinderTool(),
     ToolType.unscrambler: UnscramblerTool(),
     ToolType.scrambler: ScramblerTool(),
     ToolType.anagramMaker: AnagramMakerTool(),
     ToolType.crosswordFinder: CrosswordFinderTool(),
     ToolType.wordValidator: WordValidatorTool(),
     ToolType.randomWordGenerator: RandomWordGeneratorTool(),
-    ToolType.wordCounter: WordCounterTool(),
-    ToolType.syllableCounter: SyllableCounterTool(),
+    // ToolType.wordCounter: WordCounterTool(), // Blocked out
+    // ToolType.syllableCounter: SyllableCounterTool(), // Blocked out
   };
 
   bool loadingWords = true;

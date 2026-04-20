@@ -32,6 +32,11 @@ const String lexiKitCopyrightText =
   'Copyright 2026 LexiKit. All rights reserved unless otherwise stated.';
 
 const Map<ToolType, ToolInstruction> lexiKitInstructions = {
+  ToolType.scrabbleFinder: ToolInstruction(
+    title: 'Scrabble Finder',
+    body:
+        'Enter a group of letters (no spaces). LexiKit finds all dictionary words of any length (minimum 2 letters) that can be made from those letters. You can use up to two wildcards (space, _, *, or ?) to represent any letter. Results are sorted by Scrabble points. Great for Scrabble, Words With Friends, and similar games.',
+  ),
   ToolType.unscrambler: ToolInstruction(
     title: 'Unscrambler',
     body:
@@ -45,7 +50,7 @@ const Map<ToolType, ToolInstruction> lexiKitInstructions = {
   ToolType.anagramMaker: ToolInstruction(
     title: 'Anagram Maker',
     body:
-        'For a single word, LexiKit shows all dictionary anagrams of that word. For a sentence, each word is treated separately and the result becomes a new sentence made from word-by-word anagrams. If one word has no anagram, LexiKit will say that no sentence is possible.',
+        'For a single word, LexiKit shows all dictionary anagrams of that word. For a sentence or multiple words, LexiKit finds all possible ways to use all the letters to form one long word or several smaller words (space-separated), using only real dictionary words. Results are shown as separate pills, and each pill uses all the input letters.',
   ),
   ToolType.crosswordFinder: ToolInstruction(
     title: 'Crossword Finder',
@@ -62,14 +67,14 @@ const Map<ToolType, ToolInstruction> lexiKitInstructions = {
     body:
         'Enter a number for word length. LexiKit returns up to 10 random dictionary words of that length and tries to give you a varied set with as many different letters as possible.',
   ),
-  ToolType.wordCounter: ToolInstruction(
-    title: 'Word Counter',
-    body:
-        'Enter any sentence, paragraph, or block of text. LexiKit counts the words and shows the total instantly.',
-  ),
-  ToolType.syllableCounter: ToolInstruction(
-    title: 'Syllable Counter',
-    body:
-        'Enter any sentence, paragraph, or block of text. LexiKit estimates the total number of syllables in the text. This is a quick offline estimate, so unusual words may not always be perfect.',
-  ),
+  // ToolType.wordCounter: ToolInstruction(
+  //   title: 'Word Counter',
+  //   body:
+  //       'Enter any sentence, paragraph, or block of text. LexiKit counts the words and shows the total instantly.',
+  // ),
+  // ToolType.syllableCounter: ToolInstruction(
+  //   title: 'Syllable Counter',
+  //   body:
+  //       'Enter any sentence, paragraph, or block of text. LexiKit estimates the total number of syllables in the text. This is a quick offline estimate, so unusual words may not always be perfect.',
+  // ),
 };

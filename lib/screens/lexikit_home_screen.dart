@@ -136,33 +136,34 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
                       ),
                     ),
                   const SizedBox(height: 10),
-                  for (final type in ToolType.values) ...[
-                    ToolRow(
-                      title: _service.toolTitle(type),
-                      hintText: _service.toolHint(type),
-                      controller: _controllers[type]!,
-                      onGo: () => _runTool(type),
-                      isLoading: _loadingByTool[type] ?? false,
-                    ),
-                    if (_results[type] != null)
-                      Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(top: 8, bottom: 14),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: _ResultView(
-                          resultText: _results[type]!,
-                          textStyle: textTheme.bodyMedium,
-                        ),
-                      )
-                    else if (_loadingByTool[type] == false)
-                      const SizedBox(height: 14),
-                  ],
+                  for (final type in ToolType.values)
+                    if (_service.toolTitle(type) != 'Unknown Tool') ...[
+                      ToolRow(
+                        title: _service.toolTitle(type),
+                        hintText: _service.toolHint(type),
+                        controller: _controllers[type]!,
+                        onGo: () => _runTool(type),
+                        isLoading: _loadingByTool[type] ?? false,
+                      ),
+                      if (_results[type] != null)
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(top: 8, bottom: 14),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: _ResultView(
+                            resultText: _results[type]!,
+                            textStyle: textTheme.bodyMedium,
+                          ),
+                        )
+                      else if (_loadingByTool[type] == false)
+                        const SizedBox(height: 14),
+                    ],
                   const SizedBox(height: 6),
                   _SectionHeading(
                       title: 'Instructions',
@@ -174,12 +175,13 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
                   ),
                   const SizedBox(height: 14),
                   for (final type in ToolType.values)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _InstructionCard(
-                        instruction: lexiKitInstructions[type]!,
+                    if (lexiKitInstructions[type] != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _InstructionCard(
+                          instruction: lexiKitInstructions[type]!,
+                        ),
                       ),
-                    ),
                   const SizedBox(height: 18),
                   const Divider(),
                   const SizedBox(height: 10),
@@ -336,6 +338,7 @@ class _InstructionCard extends StatelessWidget {
 }
 
 class _ResultView extends StatelessWidget {
+
   const _ResultView({
     required this.resultText,
     this.textStyle,
@@ -343,6 +346,34 @@ class _ResultView extends StatelessWidget {
 
   final String resultText;
   final TextStyle? textStyle;
+
+  Widget _buildWordWithScore(String word, BuildContext context) {
+    final match = RegExp(r'^(?<w>[a-z-]+)(?: \((?<s>\d+)\))?$').firstMatch(word);
+    if (match == null) {
+      return Text(word, style: Theme.of(context).textTheme.bodySmall?.copyWith(
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        fontWeight: FontWeight.w600,
+      ));
+    }
+    final w = match.namedGroup('w')!;
+    final s = match.namedGroup('s');
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(w, style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+          fontWeight: FontWeight.w600,
+        )),
+        if (s != null) ...[
+          const SizedBox(width: 4),
+          Text('($s)', style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
+            fontWeight: FontWeight.w400,
+          )),
+        ]
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -373,13 +404,7 @@ class _ResultView extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(999),
               ),
-              child: Text(
-                word,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
+              child: _buildWordWithScore(word, context),
             ),
           ),
       ],
@@ -394,9 +419,11 @@ class _ResultView extends StatelessWidget {
         .toList();
 
     if (lines.isEmpty) return null;
-    final allWordLike =
-        lines.every((line) => RegExp(r'^[a-z-]+$').hasMatch(line));
-    if (!allWordLike) return null;
+
+    // Accept lines like 'word' or 'word (12)' for Scrabble Finder
+    final allWordOrScored = lines.every((line) =>
+        RegExp(r'^[a-z-]+( \(\d+\))?$').hasMatch(line));
+    if (!allWordOrScored) return null;
     return lines;
   }
 }
