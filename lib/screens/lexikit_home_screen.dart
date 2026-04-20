@@ -191,28 +191,32 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
                         instruction: lexiKitInstructions[type]!,
                       ),
                     ),
-                  const SizedBox(height: 4),
-                  _SectionHeading(title: 'About', subtitle: 'What LexiKit is and how it works.'),
-                  const SizedBox(height: 8),
-                  _InfoCard(text: lexiKitAboutText),
-                  const SizedBox(height: 12),
-                  _SectionHeading(title: 'Privacy', subtitle: 'How data is handled.'),
-                  const SizedBox(height: 8),
-                  _InfoCard(text: lexiKitPrivacyText),
                   const SizedBox(height: 18),
                   const Divider(),
                   const SizedBox(height: 10),
                   _SectionHeading(title: 'Footer', subtitle: 'Site information and policy text.'),
                   const SizedBox(height: 8),
-                  _InfoCard(text: lexiKitAboutText),
-                  const SizedBox(height: 10),
-                  _InfoCard(text: lexiKitPrivacyText),
-                  const SizedBox(height: 10),
-                  _InfoCard(text: lexiKitTermsText),
-                  const SizedBox(height: 10),
-                  _InfoCard(text: lexiKitDisclaimerText),
-                  const SizedBox(height: 10),
-                  _InfoCard(text: lexiKitContactText),
+                  _FooterPolicyTile(
+                    title: 'About',
+                    body: lexiKitAboutText,
+                    initiallyExpanded: true,
+                  ),
+                  _FooterPolicyTile(
+                    title: 'Privacy Policy',
+                    body: lexiKitPrivacyText,
+                  ),
+                  _FooterPolicyTile(
+                    title: 'Terms of Use',
+                    body: lexiKitTermsText,
+                  ),
+                  _FooterPolicyTile(
+                    title: 'Disclaimer',
+                    body: lexiKitDisclaimerText,
+                  ),
+                  _FooterPolicyTile(
+                    title: 'Contact',
+                    body: lexiKitContactText,
+                  ),
                   const SizedBox(height: 10),
                   Center(
                     child: Text(
@@ -251,23 +255,53 @@ class _SectionHeading extends StatelessWidget {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({required this.text});
+class _FooterPolicyTile extends StatelessWidget {
+  const _FooterPolicyTile({
+    required this.title,
+    required this.body,
+    this.initiallyExpanded = false,
+  });
 
-  final String text;
+  final String title;
+  final String body;
+  final bool initiallyExpanded;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: colorScheme.outlineVariant),
       ),
-      child: Text(text),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+          childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14))),
+          collapsedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14))),
+          initiallyExpanded: initiallyExpanded,
+          title: Text(
+            title,
+            style: textTheme.titleMedium,
+          ),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                body,
+                style: textTheme.bodyMedium,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
