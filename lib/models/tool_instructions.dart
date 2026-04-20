@@ -26,7 +26,7 @@ const String lexiKitDisclaimerText =
   'LexiKit is not legal, academic, or professional advice. The tool outputs are suggestions and estimates only. Always verify important word choices, counts, and language decisions independently when accuracy is critical.';
 
 const String lexiKitContactText =
-  'Contact: geir.offenberg@gmail.com;
+  'Contact: geir.offenberg@gmail.com';
 
 const String lexiKitCopyrightText =
   'Copyright 2026 LexiKit. All rights reserved unless otherwise stated.';
