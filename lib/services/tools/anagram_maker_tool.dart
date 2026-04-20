@@ -55,8 +55,9 @@ class AnagramMakerTool implements WordTool {
     final letterBag = letterCounts(letters);
 
     // Precompute all dictionary words that can be built from the letter bag and are <= letters.length
+    // Exclude single-letter words (they're not meaningful in anagram context)
     final candidates = dictList
-        .where((w) => w.length > 0 && w.length <= letters.length && canBuildWord(w, letterBag))
+        .where((w) => w.length > 1 && w.length <= letters.length && canBuildWord(w, letterBag))
         .toList();
 
     void search(String remaining, List<String> current) {

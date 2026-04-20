@@ -348,31 +348,34 @@ class _ResultView extends StatelessWidget {
   final TextStyle? textStyle;
 
   Widget _buildWordWithScore(String word, BuildContext context) {
+    // Try to parse as "word (score)" format (for Scrabble Finder)
     final match = RegExp(r'^(?<w>[a-z-]+)(?: \((?<s>\d+)\))?$').firstMatch(word);
-    if (match == null) {
-      return Text(word, style: Theme.of(context).textTheme.bodySmall?.copyWith(
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
-        fontWeight: FontWeight.w600,
-      ));
-    }
-    final w = match.namedGroup('w')!;
-    final s = match.namedGroup('s');
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(w, style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-          fontWeight: FontWeight.w600,
-        )),
-        if (s != null) ...[
-          const SizedBox(width: 4),
-          Text('($s)', style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
-            fontWeight: FontWeight.w400,
+    if (match != null) {
+      final w = match.namedGroup('w')!;
+      final s = match.namedGroup('s');
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(w, style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+            fontWeight: FontWeight.w600,
           )),
-        ]
-      ],
-    );
+          if (s != null) ...[
+            const SizedBox(width: 4),
+            Text('($s)', style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
+              fontWeight: FontWeight.w400,
+            )),
+          ]
+        ],
+      );
+    }
+    
+    // For multi-word results (Anagram Maker), display as-is
+    return Text(word, style: Theme.of(context).textTheme.bodySmall?.copyWith(
+      color: Theme.of(context).colorScheme.onPrimaryContainer,
+      fontWeight: FontWeight.w600,
+    ));
   }
 
   @override
@@ -412,7 +415,7 @@ class _ResultView extends StatelessWidget {
   }
 
   List<String>? _extractWordList(String raw) {
-    final lines = raw
+    var lines = raw
         .split('\n')
         .map((line) => line.trim())
         .where((line) => line.isNotEmpty)
@@ -420,9 +423,14 @@ class _ResultView extends StatelessWidget {
 
     if (lines.isEmpty) return null;
 
-    // Accept lines like 'word' or 'word (12)' for Scrabble Finder
+    // Skip header lines like "All possible anagrams..." or "No anagrams found."
+    lines = lines.where((line) => !line.contains(':') && !line.contains('No ') && !line.contains('Enter')).toList();
+
+    if (lines.isEmpty) return null;
+
+    // Accept lines like 'word', 'word (12)' for Scrabble Finder, or 'word1 word2 ...' for Anagram Maker
     final allWordOrScored = lines.every((line) =>
-        RegExp(r'^[a-z-]+( \(\d+\))?$').hasMatch(line));
+        RegExp(r'^[a-z-]+( \(\d+\))?( [a-z-]+( \(\d+\))?)*$').hasMatch(line));
     if (!allWordOrScored) return null;
     return lines;
   }
