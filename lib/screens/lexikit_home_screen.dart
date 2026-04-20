@@ -86,6 +86,7 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -99,63 +100,174 @@ class _LexiKitHomeScreenState extends State<LexiKitHomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(12),
-          children: [
-            if (_service.loadingError.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  _service.loadingError,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ),
-            for (final type in ToolType.values) ...[
-              ToolRow(
-                title: _service.toolTitle(type),
-                hintText: _service.toolHint(type),
-                controller: _controllers[type]!,
-                onGo: () => _runTool(type),
-                isLoading: _loadingByTool[type] ?? false,
-              ),
-              if (_results[type] != null)
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(top: 8, bottom: 14),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: _ResultView(
-                    resultText: _results[type]!,
-                    textStyle: textTheme.bodyMedium,
-                  ),
-                )
-              else if (_loadingByTool[type] == false)
-                const SizedBox(height: 14),
-            ],
-            const SizedBox(height: 10),
-            Text(
-              'Instructions',
-              style: textTheme.headlineSmall,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                colorScheme.surfaceContainerLowest,
+                colorScheme.surface,
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              lexiKitInstructionsIntro,
-              style: textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 14),
-            for (final type in ToolType.values)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _InstructionCard(
-                  instruction: lexiKitInstructions[type]!,
-                ),
+          ),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1040),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerLow,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: colorScheme.outlineVariant),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Offline Word Utilities',
+                          style: textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Use any tool row below, tap Go, and get instant results. Everything runs from the local dictionary file for fast offline usage.',
+                          style: textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (_service.loadingError.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        _service.loadingError,
+                        style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      ),
+                    ),
+                  const SizedBox(height: 16),
+                  _SectionHeading(title: 'Utilities', subtitle: 'Simple tools, one line each.'),
+                  const SizedBox(height: 10),
+                  for (final type in ToolType.values) ...[
+                    ToolRow(
+                      title: _service.toolTitle(type),
+                      hintText: _service.toolHint(type),
+                      controller: _controllers[type]!,
+                      onGo: () => _runTool(type),
+                      isLoading: _loadingByTool[type] ?? false,
+                    ),
+                    if (_results[type] != null)
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(top: 8, bottom: 14),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: _ResultView(
+                          resultText: _results[type]!,
+                          textStyle: textTheme.bodyMedium,
+                        ),
+                      )
+                    else if (_loadingByTool[type] == false)
+                      const SizedBox(height: 14),
+                  ],
+                  const SizedBox(height: 6),
+                  _SectionHeading(title: 'Instructions', subtitle: 'How every tool works in plain language.'),
+                  const SizedBox(height: 8),
+                  Text(
+                    lexiKitInstructionsIntro,
+                    style: textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 14),
+                  for (final type in ToolType.values)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _InstructionCard(
+                        instruction: lexiKitInstructions[type]!,
+                      ),
+                    ),
+                  const SizedBox(height: 4),
+                  _SectionHeading(title: 'About', subtitle: 'What LexiKit is and how it works.'),
+                  const SizedBox(height: 8),
+                  _InfoCard(text: lexiKitAboutText),
+                  const SizedBox(height: 12),
+                  _SectionHeading(title: 'Privacy', subtitle: 'How data is handled.'),
+                  const SizedBox(height: 8),
+                  _InfoCard(text: lexiKitPrivacyText),
+                  const SizedBox(height: 18),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  _SectionHeading(title: 'Footer', subtitle: 'Site information and policy text.'),
+                  const SizedBox(height: 8),
+                  _InfoCard(text: lexiKitAboutText),
+                  const SizedBox(height: 10),
+                  _InfoCard(text: lexiKitPrivacyText),
+                  const SizedBox(height: 10),
+                  _InfoCard(text: lexiKitTermsText),
+                  const SizedBox(height: 10),
+                  _InfoCard(text: lexiKitDisclaimerText),
+                  const SizedBox(height: 10),
+                  _InfoCard(text: lexiKitContactText),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      lexiKitCopyrightText,
+                      style: textTheme.bodySmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
-          ],
+            ),
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _SectionHeading extends StatelessWidget {
+  const _SectionHeading({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: textTheme.headlineSmall),
+        const SizedBox(height: 4),
+        Text(subtitle, style: textTheme.bodyMedium),
+      ],
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  const _InfoCard({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Text(text),
     );
   }
 }

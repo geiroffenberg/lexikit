@@ -13,6 +13,24 @@ class ToolInstruction {
 const String lexiKitInstructionsIntro =
     'LexiKit works fully offline using the built-in dictionary file. Enter your input in any tool row, tap Go, and scroll to the result box below that row. The notes below explain exactly what each tool does.';
 
+const String lexiKitAboutText =
+  'LexiKit is an offline-first word utility app built for quick puzzle solving and writing support. It runs locally and uses one bundled dictionary file, so the core tools continue to work without an internet connection.';
+
+const String lexiKitPrivacyText =
+  'LexiKit does not require account sign-in and does not send your word inputs to a server. Core processing happens on-device or in-browser using the local dictionary asset. If analytics or ads are added later, this section should be updated to describe exactly what is collected.';
+
+const String lexiKitTermsText =
+  'LexiKit is provided as-is for educational and general utility use. Results are generated automatically from the bundled dictionary and may not be perfect for every use case. By using LexiKit, users accept responsibility for how they apply generated results.';
+
+const String lexiKitDisclaimerText =
+  'LexiKit is not legal, academic, or professional advice. The tool outputs are suggestions and estimates only. Always verify important word choices, counts, and language decisions independently when accuracy is critical.';
+
+const String lexiKitContactText =
+  'Contact: Add your public support email or contact page link here before publishing ads.';
+
+const String lexiKitCopyrightText =
+  'Copyright 2026 LexiKit. All rights reserved unless otherwise stated.';
+
 const Map<ToolType, ToolInstruction> lexiKitInstructions = {
   ToolType.unscrambler: ToolInstruction(
     title: 'Unscrambler',
