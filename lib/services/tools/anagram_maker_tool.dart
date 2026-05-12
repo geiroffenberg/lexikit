@@ -34,7 +34,7 @@ class AnagramMakerTool implements WordTool {
       if (results.isEmpty) {
         return 'No full anagrams found.';
       }
-      return 'All possible anagrams using all letters (single or multi-word):\n' + results.join('\n');
+      return 'All possible anagrams using all letters (single or multi-word):\n${results.join('\n')}';
     }
 
     if (!RegExp(r'^[a-z]+$').hasMatch(normalized)) {
