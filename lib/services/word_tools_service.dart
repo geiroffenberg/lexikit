@@ -9,6 +9,7 @@ import 'tools/random_word_generator_tool.dart';
 import 'tools/scrambler_tool.dart';
 import 'tools/tool_context.dart';
 import 'tools/unscrambler_tool.dart';
+import 'tools/word_finder_tool.dart';
 import 'tools/word_tool.dart';
 import 'tools/word_validator_tool.dart';
 import 'tools/scrabble_finder_tool.dart';
@@ -16,6 +17,7 @@ import 'tools/scrabble_finder_tool.dart';
 class WordToolsService {
   final Random _random = Random();
   final Map<ToolType, WordTool> _tools = {
+    ToolType.wordFinder: WordFinderTool(),
     ToolType.scrabbleFinder: ScrabbleFinderTool(),
     ToolType.unscrambler: UnscramblerTool(),
     ToolType.scrambler: ScramblerTool(),

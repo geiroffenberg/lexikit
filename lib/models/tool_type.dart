@@ -1,4 +1,5 @@
 enum ToolType {
+  wordFinder,
   scrabbleFinder,
   unscrambler,
   scrambler,

@@ -363,7 +363,7 @@ class _ResultView extends StatelessWidget {
           if (s != null) ...[
             const SizedBox(width: 4),
             Text('($s)', style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
+              color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
               fontWeight: FontWeight.w400,
             )),
           ]
